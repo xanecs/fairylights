@@ -1,0 +1,17 @@
+{
+  "name": "fairylights",
+  "version": "1.0.0",
+  "description": "Turn on lights based on notifications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Leon Bentrup <leon@leonadi.de>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.10.4",
+    "imap": "^0.8.14",
+    "jade": "^1.8.0",
+    "serial-port-stream": "^0.1.0"
+  }
+}
