@@ -2,10 +2,10 @@ var express = require("express");
 var serialport = require("serial-port-stream");
 var imap = require("imap");
 var child_process = require("child_process");
-var config = require("config");
+var config = require("./config.js");
 
 
-var stream = new serialport("/dev/tty.serial1", {baudRate: 9600});
+var stream = new serialport(config.lights.serial, {baudRate: 9600});
 
 function on() {
   stream.write("1\n");
@@ -83,4 +83,4 @@ app.get("/off", function(req, res) {
 });
 
 app.listen(config.server.port, config.server.host);
-console.log("Listening on port" + "config.server.port");
+console.log("Listening on port " + config.server.port);

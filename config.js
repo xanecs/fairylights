@@ -14,5 +14,8 @@ module.exports = {
   server: {
     port: 1338,
     host: null
+  },
+  lights: {
+    serial: "/dev/ttyACM0"
   }
 }
