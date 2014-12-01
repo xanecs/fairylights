@@ -78,7 +78,7 @@ app.get("/on", function(req, res) {
 
 app.get("/off", function(req, res) {
   console.log("Manual off (Web)");
-  statusTable["web"] = false;
+  statusTable = [];
   updateLight();
   stream.write("0\n");
   res.redirect("/");
