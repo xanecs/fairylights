@@ -8,7 +8,6 @@ exports.setup = function (config, on, off, cb) {
       email.status("INBOX", function(err, box) {
         if (err) throw(err);
         if (box.messages.unseen > 0) {
-          console.log("New email");
           on();
         } else {
           off();
