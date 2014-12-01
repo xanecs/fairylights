@@ -9,6 +9,7 @@
   "author": "Leon Bentrup <leon@leonadi.de>",
   "license": "MIT",
   "dependencies": {
+    "async": "^0.9.0",
     "express": "^4.10.4",
     "imap": "^0.8.14",
     "jade": "^1.8.0",

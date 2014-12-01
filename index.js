@@ -1,62 +1,57 @@
 var express = require("express");
 var serialport = require("serial-port-stream");
-var imap = require("imap");
-var child_process = require("child_process");
-var config = require("./config.js");
+var async = require("async");
 
+var config;
+
+try {
+  config = require("./config.js");
+} catch(ex) {
+  config = require("./config.example.js");
+}
 
 var stream = new serialport(config.lights.serial, {baudRate: 9600});
 
-function on() {
-  stream.write("1\n");
-}
+var statusTable = [];
+var onReasons;
 
-function off() {
-  stream.write("0\n");
-}
-
-/*
-function getEmail() {
-  var email = new imap(config.email);
-
-  email.once("ready", function() {
-    email.status("INBOX", function(err, box) {
-      if (err) throw(err);
-      console.log(box);
-      if (box.messages.unseen > 0) {
-        stream.write("1\n");
-      } else {
-        stream.write("0\n");
+function updateLight() {
+  onReasons = [];
+  for( var key in statusTable ) {
+    if (statusTable.hasOwnProperty(key)) {
+      if (statusTable[key]) {
+        onReasons.push(key)
       }
-      email.end();
-    });
-  });
-
-  email.on("error", function (err) {
-    console.log(err);
-  });
-
-  email.connect();
-}*/
-
-//getEmail();
-//setInterval(getEmail, 60000);
-
-var telegram = child_process.spawn(config.telegram.bin, ["-k", config.telegram.key, "-R", "-C"]);
-var tg_buffer = "";
-telegram.stdout.on("data", function(data) {
-  tg_buffer += data;
-  if (tg_buffer.indexOf("\n") !== -1) {
-    if (tg_buffer.indexOf(">>>") !== -1) {
-      console.log("New message");
-      on();
     }
-    if (tg_buffer.indexOf(config.telegram.name + " online") !== -1) {
-      console.log("Read message");
-      off();
-    }
-    tg_buffer = "";
   }
+  if (onReasons.length > 0) {
+    stream.write("1\n");
+    console.log("Light turned on");
+    onReasons.forEach(function (el) {
+      console.log(" - " + el);
+    });
+  } else {
+    stream.write("0\n");
+    console.log("Light turned off");
+  }
+}
+
+var notifiers = [];
+config.notify.forEach(function (notify) {
+  notifiers[notify.name] = require("./notify/" + notify.type + ".js").setup(
+    notify.config,
+    function on() {
+      statusTable[notify.name] = true;
+      updateLight();
+    },
+    function off() {
+      statusTable[notify.name] = false;
+      updateLight();
+    },
+    function cb() {
+      console.log(notify.name + " set up");
+    }
+  )
 });
 
 var app = express();
@@ -72,13 +67,16 @@ app.get("/", function(req, res) {
 
 app.get("/on", function(req, res) {
   console.log("Manual on (Web)");
-  on();
+  statusTable["web"] = true;
+  updateLights();
   res.redirect("/");
 });
 
 app.get("/off", function(req, res) {
   console.log("Manual off (Web)");
-  off();
+  statusTable["web"] = false;
+  updateLights();
+  stream.write("0\n");
   res.redirect("/");
 });
 
