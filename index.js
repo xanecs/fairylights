@@ -68,14 +68,14 @@ app.get("/", function(req, res) {
 app.get("/on", function(req, res) {
   console.log("Manual on (Web)");
   statusTable["web"] = true;
-  updateLights();
+  updateLight();
   res.redirect("/");
 });
 
 app.get("/off", function(req, res) {
   console.log("Manual off (Web)");
   statusTable["web"] = false;
-  updateLights();
+  updateLight();
   stream.write("0\n");
   res.redirect("/");
 });
