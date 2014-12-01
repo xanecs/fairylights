@@ -15,10 +15,18 @@ a {
   text-decoration: none;
 }
 
-.on {
+.btn.on {
   background: #3E7064;
 }
 
-.off {
+.btn.off {
   background: #962223;
+}
+
+p.on {
+  color: #3E7064;
+}
+
+p.off {
+  color: #962223;
 }

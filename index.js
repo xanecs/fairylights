@@ -13,7 +13,7 @@ try {
 var stream = new serialport(config.lights.serial, {baudRate: 9600});
 
 var statusTable = [];
-var onReasons;
+var onReasons = [];
 
 function updateLight() {
   onReasons = [];
@@ -63,6 +63,10 @@ app.use(express.static(__dirname + "/static"));
 
 app.get("/", function(req, res) {
   res.render("index");
+});
+
+app.get("/status", function(req, res) {
+  res.render("status", {lightOn: onReasons.length > 0, reasons: onReasons});
 });
 
 app.get("/on", function(req, res) {

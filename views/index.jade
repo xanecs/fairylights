@@ -10,3 +10,19 @@ html
       div.btn.on ON
     a(href="/off")
       div.btn.off OFF
+    div#status
+
+    script(type="text/javascript").
+      function refresh() {
+        var req = new XMLHttpRequest();
+        req.open("GET", "/status", true);
+        req.onreadystatechange = function () {
+          if (req.readyState == 4) {
+            var status = document.getElementById("status");
+            status.innerHTML = req.responseText;
+          }
+        }
+        req.send(null);
+      }
+      setInterval(refresh, 5000);
+      refresh()
