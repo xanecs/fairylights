@@ -115,4 +115,4 @@ Clicking the red *OFF* button will turn the light off, until another notificatio
 
 Below it says wether the light is currently off or on. If it is on, it will also give you a list of the currently triggered notify modules.
 
-![Web interface](https://raw.githubusercontent.com/xanecs/fairylights/master/doc/webif.png)
+![Web interface](https://raw.githubusercontent.com/xanecs/fairylights/master/doc/webif.jpg)
